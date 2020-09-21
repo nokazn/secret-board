@@ -36,7 +36,7 @@ module.exports = {
     ],
     'import/no-unresolved': [2, { commonjs: true, amd: true }],
     'import/prefer-default-export': 0,
-    indent: [2, 2],
+    indent: [2, 2, { SwitchCase: 1 }],
     'lines-between-class-members': 0,
     'no-console': 0,
     // typescript-eslint の no-unuserd-vars を有効にする
