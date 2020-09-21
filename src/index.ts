@@ -1,8 +1,9 @@
 import http from 'http';
+import { router } from './lib/router';
 
 const server = http
-  .createServer((_req, res) => {
-    res.end('hi');
+  .createServer((req, res) => {
+    router(req, res);
   })
   .on('error', (err) => {
     console.error('Server Error', err);
