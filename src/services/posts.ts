@@ -1,6 +1,8 @@
 import { IncomingMessage, ServerResponse } from 'http';
 import pug from 'pug';
 
+const contents: string[] = [];
+
 const handleRedirectPosts = (_req: IncomingMessage, res: ServerResponse) => {
   // See Other
   res.writeHead(303, {
@@ -28,7 +30,9 @@ export const posts = (req: IncomingMessage, res: ServerResponse) => {
           const data = Buffer.concat(body).toString();
           // content=value の形式でわたってくる
           const content = decodeURIComponent(data).split('content=')[1];
+          contents.push(content);
           console.info(`投稿されました: ${content}`);
+          console.info(`投稿された全内容: ${contents}`);
           handleRedirectPosts(req, res);
         });
       break;
