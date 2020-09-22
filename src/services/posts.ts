@@ -17,7 +17,7 @@ export const posts = (req: IncomingMessage, res: ServerResponse) => {
       res.writeHead(200, {
         'Content-Type': 'text/html; charset=utf8',
       });
-      res.end(pug.renderFile('./src/views/posts.pug'));
+      res.end(pug.renderFile('./src/views/posts.pug', { contents }));
       break;
     case 'POST':
       // eslint-disable-next-line no-case-declarations
