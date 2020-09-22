@@ -1,6 +1,7 @@
 import { IncomingMessage, ServerResponse } from 'http';
 import { posts } from '../services/posts';
 import { logout } from '../services/logout';
+import { notFound } from '../services/notFound';
 
 export const router = (req: IncomingMessage, res: ServerResponse) => {
   switch (req.url) {
@@ -11,6 +12,6 @@ export const router = (req: IncomingMessage, res: ServerResponse) => {
       logout(req, res);
       break;
     default:
-      break;
+      notFound(req, res);
   }
 };
