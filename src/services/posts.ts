@@ -37,6 +37,9 @@ export const posts = (req: IncomingMessage, res: ServerResponse) => {
         });
       break;
     default:
-      break;
+      res.writeHead(400, {
+        'Content-Type': 'text/plain; charset=utf8',
+      });
+      res.end('未対応のメソッドです');
   }
 };
