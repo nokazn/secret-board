@@ -1,5 +1,6 @@
 import { IncomingMessage, ServerResponse } from 'http';
 import pug from 'pug';
+import { handleBadRequest } from './utils';
 
 const contents: string[] = [];
 
@@ -37,9 +38,6 @@ export const posts = (req: IncomingMessage, res: ServerResponse) => {
         });
       break;
     default:
-      res.writeHead(400, {
-        'Content-Type': 'text/plain; charset=utf8',
-      });
-      res.end('未対応のメソッドです');
+      handleBadRequest(req, res);
   }
 };
