@@ -1,5 +1,6 @@
 import { IncomingMessage, ServerResponse } from 'http';
 import { posts } from '../services/posts';
+import { logout } from '../services/logout';
 
 export const router = (req: IncomingMessage, res: ServerResponse) => {
   switch (req.url) {
@@ -7,7 +8,7 @@ export const router = (req: IncomingMessage, res: ServerResponse) => {
       posts(req, res);
       break;
     case '/logout':
-      // @todo
+      logout(req, res);
       break;
     default:
       break;
