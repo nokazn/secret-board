@@ -1,5 +1,4 @@
 import http from 'http';
-// @ts-ignore
 import * as auth from 'http-auth';
 import { router } from './lib/router';
 
@@ -8,10 +7,9 @@ const basic = auth.basic({
   file: './src/users.htpasswd',
 });
 
-console.log(basic);
 const server = http
   .createServer(
-    basic.check((req: http.IncomingMessage, res: http.ServerResponse) => {
+    basic.check((req, res) => {
       router(req, res);
     }),
   )

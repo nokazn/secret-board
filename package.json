@@ -16,6 +16,7 @@
   "author": "nokazn",
   "license": "MIT",
   "dependencies": {
+    "@types/http-auth": "^4.1.0",
     "dotenv": "^8.2.0",
     "http-auth": "^4.1.2",
     "pug": "^2.0.4"
