@@ -1,5 +1,6 @@
 import { IncomingMessage, ServerResponse } from 'http';
 import pug from 'pug';
+import Post from '../model/post';
 import { handleBadRequest } from './utils';
 
 const contents: string[] = [];
@@ -12,7 +13,7 @@ const handleRedirectPosts = (_req: IncomingMessage, res: ServerResponse) => {
   res.end();
 };
 
-export const posts = (req: IncomingMessage, res: ServerResponse) => {
+export const posts = (req: IncomingMessage & { user?: string }, res: ServerResponse) => {
   switch (req.method) {
     case 'GET':
       res.writeHead(200, {
@@ -34,7 +35,19 @@ export const posts = (req: IncomingMessage, res: ServerResponse) => {
           contents.push(content);
           console.info(`投稿されました: ${content}`);
           console.info(`投稿された全内容: ${contents}`);
-          handleRedirectPosts(req, res);
+          Post.then((post) =>
+            post.create({
+              content,
+              trackingCookie: null,
+              postedBy: req.user,
+            }),
+          )
+            .then(() => {
+              handleRedirectPosts(req, res);
+            })
+            .catch((err) => {
+              console.error({ err });
+            });
         });
       break;
     default:
