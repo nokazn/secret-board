@@ -1,12 +1,16 @@
 import { IncomingMessage, ServerResponse } from 'http';
-import { posts } from '../services/posts';
+import { PostService } from '../services/PostService';
 import { logout } from '../services/logout';
 import { notFound } from '../services/notFound';
 
-export const router = (req: IncomingMessage, res: ServerResponse) => {
+export const router = (req: IncomingMessage & { user?: string }, res: ServerResponse) => {
   switch (req.url) {
     case '/posts':
-      posts(req, res);
+      if (req.user != null) {
+        PostService(req as IncomingMessage & { user: string }, res);
+      } else {
+        notFound(req, res);
+      }
       break;
     case '/logout':
       logout(req, res);

@@ -1,22 +1,17 @@
-import { Sequelize, DataTypes } from 'sequelize';
+import { DataTypes, ModelDefined, Optional } from 'sequelize';
+import { db } from '../infrastructure';
 
-const sequelize = new Sequelize(
-  'postgres://postgres:postgres@localhost/secret_board',
-  'postgres',
-  'postgres',
-  {
-    logging: false,
-    // host: 'localhost',
-    // operatorsAliases: false,
-    dialect: 'postgres',
-    define: {
-      freezeTableName: true,
-    },
-  },
-);
+interface PostAttributes {
+  id: number;
+  content: string;
+  postedBy: string;
+  trackingCookie: string | null;
+}
+
+interface PostCreationAttributes extends Optional<PostAttributes, 'id'> {}
 
 const init = async () => {
-  const Post = sequelize.define(
+  const Post: ModelDefined<PostAttributes, PostCreationAttributes> = db.define(
     'Post',
     {
       id: {
@@ -32,6 +27,7 @@ const init = async () => {
       },
       trackingCookie: {
         type: DataTypes.STRING,
+        allowNull: true,
       },
     },
     {
