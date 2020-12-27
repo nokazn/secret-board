@@ -5,7 +5,6 @@ import dayjs from 'dayjs';
 import Post from '../models/Post';
 import { addTrackingCookie, handleBadRequest, handleRedirectPosts, handlePost } from './utils';
 import { TRACKING_COOKIE_ID } from '../constants';
-// import type { PostAttributes } from '../model/Post';
 import type { AuthorizedIncomingMessage } from '../types';
 
 export const PostController = (req: AuthorizedIncomingMessage, res: ServerResponse) => {
@@ -20,7 +19,6 @@ export const PostController = (req: AuthorizedIncomingMessage, res: ServerRespon
           // @ts-expect-error
           formattedCreatedAt: dayjs(p.createdAt).format('YYYY年M月D日 H時mm分ss秒'),
         }));
-        console.log(formattedPosts[0]);
         res.writeHead(200, {
           'Content-Type': 'text/html; charset=utf8',
         });
@@ -67,8 +65,7 @@ export const PostDeleteController = (req: AuthorizedIncomingMessage, res: Server
   handlePost('id', (id) => {
     Post.then((post) => post.findByPk(id))
       .then((post) => {
-        // @ts-ignore
-        if (req.user === post?.postedBy) {
+        if (req.user === post?.getDataValue('postedBy')) {
           return post.destroy();
         }
         return Promise.resolve();

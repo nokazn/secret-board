@@ -35,7 +35,7 @@ html(lang="ja")
               if post.trackingCookie
                 span.h5  ID: #{post.trackingCookie}
 
-          p.card-text.fs-5.my-3!= post.content ? post.content.replace(/\n/g, '<br>') : ''
+          p.card-text.fs-5.my-3(style="white-space: pre; overflow: auto;") #{post.content}
           div.d-flex.flex-row.justify-content-between
             - const isAdmin = user === 'admin'
             p.card-text.text-muted.mb-1
