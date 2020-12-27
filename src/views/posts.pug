@@ -15,13 +15,18 @@ html(lang="ja")
 
   h2 投稿一覧
   each post in posts
-    if post.trackingCookie
+    if post.postedBy === 'admin'
+      h3 #{post.id}. 管理人★
+    else if post.trackingCookie
       h3 #{post.id}. ID: #{post.trackingCookie}
     else
       h3 #{post.id}
-    p #{post.content}
+    p!= post.content ? post.content.replace(/\n/g, '<br>') : ''
+    - const isAdmin = user === 'admin'
+    if isAdmin
+      p 投稿者: #{post.postedBy}
     p 投稿日時: #{post.createdAt}
-    if user === post.postedBy
+    if user === post.postedBy || isAdmin
       form(method="post" action="/posts?delete=1")
         input(type="hidden" name="id" value=post.id)
         button(type="submit") 削除

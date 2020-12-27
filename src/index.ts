@@ -1,6 +1,7 @@
 import http from 'http';
 import * as auth from 'http-auth';
 import { router } from './lib/router';
+import type { AuthorizedIncomingMessage } from './types';
 
 const basic = auth.basic({
   realm: 'Enter username and passpord.',
@@ -10,7 +11,7 @@ const basic = auth.basic({
 const server = http
   .createServer(
     basic.check((req, res) => {
-      router(req, res);
+      router(req as AuthorizedIncomingMessage, res);
     }),
   )
   .on('error', (err: Error) => {

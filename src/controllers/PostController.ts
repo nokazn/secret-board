@@ -35,7 +35,7 @@ export const PostController = (req: AuthorizedIncomingMessage, res: ServerRespon
       handlePost('content', (content) => {
         Post.then((post) =>
           post.create({
-            content,
+            content: content ?? '',
             trackingCookie,
             postedBy: req.user,
           }),
