@@ -1,9 +1,11 @@
 import { ServerResponse } from 'http';
 import pug from 'pug';
+import dayjs from 'dayjs';
 
 import Post from '../model/Post';
 import { addTrackingCookie, handleBadRequest, handleRedirectPosts, handlePost } from './utils';
 import { TRACKING_COOKIE_ID } from '../constants';
+// import type { PostAttributes } from '../model/Post';
 import type { AuthorizedIncomingMessage } from '../types';
 
 export const PostController = (req: AuthorizedIncomingMessage, res: ServerResponse) => {
@@ -13,12 +15,18 @@ export const PostController = (req: AuthorizedIncomingMessage, res: ServerRespon
   switch (req.method) {
     case 'GET':
       Post.then((post) => post.findAll({ order: [['id', 'DESC']] })).then((posts) => {
+        const formattedPosts = posts.map((p) => ({
+          ...p.get(),
+          // @ts-expect-error
+          formattedCreatedAt: dayjs(p.createdAt).format('YYYY年M月D日 H時mm分ss秒'),
+        }));
+        console.log(formattedPosts[0]);
         res.writeHead(200, {
           'Content-Type': 'text/html; charset=utf8',
         });
         res.end(
           pug.renderFile('./src/views/posts.pug', {
-            posts,
+            posts: formattedPosts,
             user: req.user,
           }),
         );

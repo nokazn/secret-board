@@ -1,7 +1,7 @@
 import { DataTypes, ModelDefined, Optional } from 'sequelize';
 import { db } from '../infrastructure/db';
 
-interface PostAttributes {
+export interface PostAttributes {
   id: number;
   content: string;
   postedBy: string;
