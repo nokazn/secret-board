@@ -23,7 +23,7 @@ export const PostController = (req: AuthorizedIncomingMessage, res: ServerRespon
           'Content-Type': 'text/html; charset=utf8',
         });
         res.end(
-          pug.renderFile('./src/views/posts.pug', {
+          pug.renderFile('src/views/posts.pug', {
             posts: formattedPosts,
             user: req.user,
           }),
