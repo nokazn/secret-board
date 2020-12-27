@@ -41,8 +41,8 @@ export const PostController = (req: AuthorizedIncomingMessage, res: ServerRespon
           }),
         )
           .then(() => {
-            handleRedirectPosts(req, res);
             console.info(`投稿されました: ${content}`);
+            handleRedirectPosts(req, res);
           })
           .catch((err) => {
             console.error({ err });
@@ -66,12 +66,12 @@ export const PostDeleteController = (req: AuthorizedIncomingMessage, res: Server
         return Promise.resolve();
       })
       .then(() => {
-        handleRedirectPosts(req, res);
-        console.info('閲覧されました。', {
+        console.info('削除されました。', {
           user: req.user,
           remoteAddress: req.connection.remoteAddress,
           userAgent: req.headers['user-agent'],
         });
+        handleRedirectPosts(req, res);
       })
       .catch((err) => {
         console.error(err);
