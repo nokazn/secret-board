@@ -1,21 +1,20 @@
 import { IncomingMessage, ServerResponse } from 'http';
-import { PostService } from '../services/PostService';
-import { logout } from '../services/logout';
-import { notFound } from '../services/notFound';
+import { PostController } from '../controllers/PostController';
+import { handleNotFound, handleLogout } from '../controllers/utils';
 
 export const router = (req: IncomingMessage & { user?: string }, res: ServerResponse) => {
   switch (req.url) {
     case '/posts':
       if (req.user != null) {
-        PostService(req as IncomingMessage & { user: string }, res);
+        PostController(req as IncomingMessage & { user: string }, res);
       } else {
-        notFound(req, res);
+        handleNotFound(req, res);
       }
       break;
     case '/logout':
-      logout(req, res);
+      handleLogout(req, res);
       break;
     default:
-      notFound(req, res);
+      handleNotFound(req, res);
   }
 };

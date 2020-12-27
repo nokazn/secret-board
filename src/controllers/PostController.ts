@@ -1,17 +1,9 @@
 import { IncomingMessage, ServerResponse } from 'http';
 import pug from 'pug';
 import Post from '../model/Post';
-import { handleBadRequest } from './utils';
+import { handleBadRequest, handleRedirectPosts } from './utils';
 
-const handleRedirectPosts = (_req: IncomingMessage, res: ServerResponse) => {
-  // See Other
-  res.writeHead(303, {
-    Location: '/posts',
-  });
-  res.end();
-};
-
-export const PostService = (req: IncomingMessage & { user: string }, res: ServerResponse) => {
+export const PostController = (req: IncomingMessage & { user: string }, res: ServerResponse) => {
   switch (req.method) {
     case 'GET':
       Post.then((post) => post.findAll({ order: [['id', 'DESC']] })).then((posts) => {

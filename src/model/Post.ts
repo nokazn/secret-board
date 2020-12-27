@@ -1,5 +1,5 @@
 import { DataTypes, ModelDefined, Optional } from 'sequelize';
-import { db } from '../infrastructure';
+import { db } from '../infrastructure/db';
 
 interface PostAttributes {
   id: number;
