@@ -1,5 +1,5 @@
 import { ServerResponse } from 'http';
-import { PostController, LogoutController } from '../controllers';
+import { PostController, PostDeleteController, LogoutController } from '../controllers';
 import { handleNotFound } from '../controllers/utils';
 import type { AuthorizedIncomingMessage } from '../types';
 
@@ -11,6 +11,9 @@ export const router = (req: AuthorizedIncomingMessage, res: ServerResponse) => {
       } else {
         handleNotFound(req, res);
       }
+      break;
+    case '/posts?delete=1':
+      PostDeleteController(req, res);
       break;
     case '/logout':
       LogoutController(req, res);

@@ -33,3 +33,28 @@ export const addTrackingCookie = (req: IncomingMessage, res: ServerResponse) => 
 
   return cookies;
 };
+
+export const handlePost = (name: string, cb: (content: string) => any) => (
+  req: IncomingMessage,
+  res: ServerResponse,
+) => {
+  switch (req.method) {
+    case 'POST':
+      // eslint-disable-next-line no-case-declarations
+      const body: Uint8Array[] = [];
+      req
+        .on('data', (chunk) => {
+          body.push(chunk);
+        })
+        .on('end', () => {
+          const data = Buffer.concat(body).toString();
+          const [, content] = decodeURIComponent(data).split(`${name}=`);
+          cb(content);
+        });
+      break;
+
+    default:
+      handleBadRequest(req, res);
+      break;
+  }
+};
