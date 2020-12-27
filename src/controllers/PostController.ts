@@ -2,7 +2,7 @@ import { ServerResponse } from 'http';
 import pug from 'pug';
 import dayjs from 'dayjs';
 
-import Post from '../model/Post';
+import Post from '../models/Post';
 import { addTrackingCookie, handleBadRequest, handleRedirectPosts, handlePost } from './utils';
 import { TRACKING_COOKIE_ID } from '../constants';
 // import type { PostAttributes } from '../model/Post';
