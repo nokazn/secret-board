@@ -16,8 +16,10 @@ export const PostController = (req: AuthorizedIncomingMessage, res: ServerRespon
       Post.then((post) => post.findAll({ order: [['id', 'DESC']] })).then((posts) => {
         const formattedPosts = posts.map((p) => ({
           ...p.get(),
-          // @ts-expect-error
-          formattedCreatedAt: dayjs(p.createdAt).format('YYYY年M月D日 H時mm分ss秒'),
+          content: p.getDataValue('content').replace(/\+/g, ' '),
+          formattedCreatedAt: dayjs(p.get('createdAt') as string).format(
+            'YYYY年M月D日 H時mm分ss秒',
+          ),
         }));
         res.writeHead(200, {
           'Content-Type': 'text/html; charset=utf8',
