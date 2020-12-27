@@ -1,11 +1,12 @@
-import { IncomingMessage, ServerResponse } from 'http';
+import { ServerResponse } from 'http';
 import pug from 'pug';
 
 import Post from '../model/Post';
 import { addTrackingCookie, handleBadRequest, handleRedirectPosts } from './utils';
 import { TRACKING_COOKIE_ID } from '../constants';
+import type { AuthorizedIncomingMessage } from '../types';
 
-export const PostController = (req: IncomingMessage & { user: string }, res: ServerResponse) => {
+export const PostController = (req: AuthorizedIncomingMessage, res: ServerResponse) => {
   const cookies = addTrackingCookie(req, res);
   const trackingCookie = cookies.get(TRACKING_COOKIE_ID) ?? null;
 

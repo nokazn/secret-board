@@ -16,13 +16,6 @@ export const handleBadRequest = (_req: IncomingMessage, res: ServerResponse) => 
   res.end('未対応のメソッドです');
 };
 
-export const handleLogout = (_req: IncomingMessage, res: ServerResponse) => {
-  res.writeHead(401, {
-    'Content-Type': 'text/plain; charset=utf-8',
-  });
-  res.end('ログアウトしました。');
-};
-
 export const handleNotFound = (_req: IncomingMessage, res: ServerResponse) => {
   res.writeHead(404, {
     'Content-Type': 'text/plain; charset=utf-8',
