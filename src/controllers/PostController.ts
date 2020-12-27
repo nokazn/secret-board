@@ -1,9 +1,14 @@
 import { IncomingMessage, ServerResponse } from 'http';
 import pug from 'pug';
+
 import Post from '../model/Post';
-import { handleBadRequest, handleRedirectPosts } from './utils';
+import { addTrackingCookie, handleBadRequest, handleRedirectPosts } from './utils';
+import { TRACKING_COOKIE_ID } from '../constants';
 
 export const PostController = (req: IncomingMessage & { user: string }, res: ServerResponse) => {
+  const cookies = addTrackingCookie(req, res);
+  const trackingCookie = cookies.get(TRACKING_COOKIE_ID) ?? null;
+
   switch (req.method) {
     case 'GET':
       Post.then((post) => post.findAll({ order: [['id', 'DESC']] })).then((posts) => {
@@ -11,6 +16,12 @@ export const PostController = (req: IncomingMessage & { user: string }, res: Ser
           'Content-Type': 'text/html; charset=utf8',
         });
         res.end(pug.renderFile('./src/views/posts.pug', { posts }));
+        console.info('閲覧されました。', {
+          user: req.user,
+          trackingCookie,
+          remoteAddress: req.connection.remoteAddress,
+          userAgent: req.headers['user-agent'],
+        });
       });
       break;
 
@@ -29,7 +40,7 @@ export const PostController = (req: IncomingMessage & { user: string }, res: Ser
           Post.then((post) =>
             post.create({
               content,
-              trackingCookie: null,
+              trackingCookie,
               postedBy: req.user,
             }),
           )
