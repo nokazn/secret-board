@@ -21,7 +21,7 @@ describe('posts page', () => {
   });
 
   it('escape script tag', () => {
-    const template = html('a  a ');
-    expect(template.includes('a  a ')).toBe(true);
+    const template = html('This is a text with spaces.');
+    expect(template.includes('This is a text with spaces.')).toBe(true);
   });
 });
