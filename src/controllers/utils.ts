@@ -4,6 +4,8 @@ import Cookies from 'cookies';
 import { TRACKING_COOKIE_ID, SALT } from '../constants';
 import type { AuthorizedIncomingMessage } from '../types';
 
+const csrfTokenMap = new Map();
+
 export const handleRedirectPosts = (_req: IncomingMessage, res: ServerResponse) => {
   res.writeHead(303, {
     Location: '/posts',
@@ -15,7 +17,7 @@ export const handleBadRequest = (_req: IncomingMessage, res: ServerResponse) => 
   res.writeHead(400, {
     'Content-Type': 'text/plain; charset=utf8',
   });
-  res.end('未対応のメソッドです');
+  res.end('未対応のリクエストです');
 };
 
 export const handleNotFound = (_req: IncomingMessage, res: ServerResponse) => {
@@ -57,34 +59,44 @@ export const addTrackingCookie = (req: AuthorizedIncomingMessage, res: ServerRes
   if (requestedTrackingId && isValidTrackingId(requestedTrackingId, req.user)) {
     return requestedTrackingId;
   }
-  const originalId = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER).toString();
+  const originalId = Math.floor(parseInt(crypto.randomBytes(8).toString('hex'), 16)).toString();
   const tomorrow = new Date(Date.now() + 1000 * 60 * 60 * 24);
   const trackingId = `${originalId}_${createValidateHash(originalId, req.user)}`;
   cookies.set(TRACKING_COOKIE_ID, trackingId, { expires: tomorrow });
   return trackingId;
 };
 
-export const handlePost = (name: string, cb: (content: string) => any) => (
+export const validateCsrfToken = (userName: string, csrfToken: string): boolean => {
+  return csrfToken != null && csrfTokenMap.get(userName) === csrfToken;
+};
+
+export const setCsrfToken = (userName: string): string => {
+  const csrfToken = crypto.randomBytes(8).toString('hex');
+  csrfTokenMap.set(userName, csrfToken);
+  return csrfToken;
+};
+
+export const handlePost = (cb: (content: Record<string, string>) => any) => (
   req: IncomingMessage,
   res: ServerResponse,
 ) => {
-  switch (req.method) {
-    case 'POST':
-      // eslint-disable-next-line no-case-declarations
-      const body: Uint8Array[] = [];
-      req
-        .on('data', (chunk) => {
-          body.push(chunk);
-        })
-        .on('end', () => {
-          const data = Buffer.concat(body).toString();
-          const [, content] = decodeURIComponent(data).split(`${name}=`);
-          cb(content);
-        });
-      break;
-
-    default:
-      handleBadRequest(req, res);
-      break;
+  if (req.method !== 'POST') {
+    handleBadRequest(req, res);
+    return;
   }
+  // eslint-disable-next-line no-case-declarations
+  const body: Uint8Array[] = [];
+  req
+    .on('data', (chunk) => {
+      body.push(chunk);
+    })
+    .on('end', () => {
+      const data = Buffer.concat(body).toString();
+      const decoded = decodeURIComponent(data);
+      const dataMap = decoded.split('&').reduce((prev, curr) => {
+        const [key, value] = curr.split('=');
+        return key != null && value != null ? Object.assign(prev, { [key]: value }) : prev;
+      }, {} as Record<string, string>);
+      cb(dataMap);
+    });
 };

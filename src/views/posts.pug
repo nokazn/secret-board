@@ -20,6 +20,7 @@ html(lang="ja")
       form(method="post" action="/posts").mb-4
         div.form-group.mb-2
           textarea(name="content" cols=40 rows=6).form-control
+          input(type="hidden" name="csrfToken", value=csrfToken)
         div.form-group
           button(type="submit").btn.btn-primary 投稿
 
