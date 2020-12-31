@@ -4,12 +4,10 @@ import dayjs from 'dayjs';
 
 import Post from '../models/Post';
 import { addTrackingCookie, handleBadRequest, handleRedirectPosts, handlePost } from './utils';
-import { TRACKING_COOKIE_ID } from '../constants';
 import type { AuthorizedIncomingMessage } from '../types';
 
 export const PostController = (req: AuthorizedIncomingMessage, res: ServerResponse) => {
-  const cookies = addTrackingCookie(req, res);
-  const trackingCookie = cookies.get(TRACKING_COOKIE_ID) ?? null;
+  const trackingCookie = addTrackingCookie(req, res);
 
   switch (req.method) {
     case 'GET':
