@@ -1,7 +1,7 @@
 import { IncomingMessage, ServerResponse } from 'http';
 import crypto from 'crypto';
 import Cookies from 'cookies';
-import { TRACKING_COOKIE_ID } from '../constants';
+import { TRACKING_COOKIE_ID, SALT } from '../constants';
 import type { AuthorizedIncomingMessage } from '../types';
 
 export const handleRedirectPosts = (_req: IncomingMessage, res: ServerResponse) => {
@@ -27,7 +27,7 @@ export const handleNotFound = (_req: IncomingMessage, res: ServerResponse) => {
 
 const createValidateHash = (originalId: string, userName: string): string => {
   const sha1sum = crypto.createHash('sha1');
-  sha1sum.update(originalId + userName);
+  sha1sum.update(originalId + userName + SALT);
   return sha1sum.digest('hex');
 };
 

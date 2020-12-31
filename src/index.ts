@@ -1,7 +1,10 @@
 import http from 'http';
 import * as auth from 'http-auth';
 import { router } from './lib/router';
+import { checkConfig } from './constants';
 import type { AuthorizedIncomingMessage } from './types';
+
+checkConfig();
 
 const basic = auth.basic({
   realm: 'Enter username and passpord.',
