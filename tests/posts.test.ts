@@ -6,7 +6,7 @@ const html = (content: string) =>
       {
         content,
         postedBy: 'guest1',
-        trackingCookie: 1,
+        trackingCookie: '1140140901232_0292q093j0q9ij2fq0er09reaui32egrerj2q0k0kg09',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
