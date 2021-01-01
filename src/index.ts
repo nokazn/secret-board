@@ -1,7 +1,7 @@
 import http from 'http';
 import * as auth from 'http-auth';
 import { router } from './lib/router';
-import { checkConfig } from './constants';
+import { checkConfig, PORT } from './constants';
 import type { AuthorizedIncomingMessage } from './types';
 
 checkConfig();
@@ -24,7 +24,7 @@ const server = http
     console.error('Client Error', err);
   });
 
-const port = 8000;
+const port = PORT || 8000;
 server.listen(port, () => {
   console.info(`Listening on ${port}`);
 });
