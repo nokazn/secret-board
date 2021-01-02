@@ -52,45 +52,16 @@ $ curl localhost:8000
 Hello World!
 ```
 
-## eslint
-
-eslint 関連の各種プラグインなどをインストールする。
+## deploy to Heroku
 
 ```bash
-$ yarn add -D @typescript-eslint/eslint-plugin \
-  @typescript-eslint/parser \
-  eslint \
-  eslint-config-airbnb-base \
-  eslint-plugin-import
+heroku config:set NPM_CONFIG_PRODUCTION=false YARN_PRODUCTION=false PORT=8000
 ```
 
-## prettier
-
-prettier 関連の各種プラグインなどをインストールする。
+また、`SALT` に適切な長さの文字列を設定しておく。
 
 ```bash
-$ yarn add -D prettier \
-  eslint-config-prettier
-```
-
-eslint との競合を防ぐため、`.eslintrc.js`を修正する。
-
-```diff:.eslintrc.js
- extends: [
-+ "prettier",
-+ "prettier/@typescript-eslint",
- ]
-```
-
-`.prettierrc.json` に適宜設定する。
-
-```json:.prettierrc.json
-{
-  "printWidth": 100,
-  "singleQuote": true,
-  "jsxSingleQuote": true,
-  "trailingComma": "all"
-}
+heroku config:set SALT=abcdefghijklmopqrstuvwxyz1234567890abcdefghijklmopqrstuvwxyz1234567890abcdefghijklmopqrstuvwxyz1234567890
 ```
 
 ## License
