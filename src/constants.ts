@@ -4,7 +4,7 @@ dotenv.config();
 
 export const {
   PORT,
-  DB_URL,
+  DATABASE_URL,
   DB_USER,
   DB_PASSWORD,
   DB_HOST,
@@ -16,9 +16,9 @@ export const TRACKING_COOKIE_ID = 'tracking_id';
 
 export const checkConfig = () => {
   const isInvalidInDevelopment =
-    DB_URL == null &&
+    DATABASE_URL == null &&
     [DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_DATABASE, SALT].some((v) => v == null);
-  const isInvalidInProduction = DB_URL != null && [PORT, SALT].some((v) => v == null);
+  const isInvalidInProduction = DATABASE_URL != null && [PORT, SALT].some((v) => v == null);
   if (isInvalidInDevelopment || isInvalidInProduction) {
     throw new Error('Environment variables are not set correctly.');
   }

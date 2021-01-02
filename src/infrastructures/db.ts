@@ -1,8 +1,9 @@
 import { Sequelize } from 'sequelize';
-import { DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_DATABASE } from '../constants';
+import { DATABASE_URL, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_DATABASE } from '../constants';
 
 const initDb = () => {
-  const uri = `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_DATABASE}`;
+  const uri =
+    DATABASE_URL ?? `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_DATABASE}`;
   const sequelize = new Sequelize(uri, {
     logging: false,
     dialect: 'postgres',
