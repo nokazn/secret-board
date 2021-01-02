@@ -10,12 +10,17 @@ import {
   handlePost,
   validateCsrfToken,
   setCsrfToken,
+  handleNotFound,
 } from './utils';
 import type { AuthorizedIncomingMessage } from '../types';
 
 export const PostController = (req: AuthorizedIncomingMessage, res: ServerResponse) => {
-  const trackingCookie = addTrackingCookie(req, res);
+  if (process.env.NODE_ENV === 'production' && req.headers['x-forwarded-proto'] === 'http') {
+    handleNotFound(req, res);
+    return;
+  }
 
+  const trackingCookie = addTrackingCookie(req, res);
   switch (req.method) {
     case 'GET':
       Post.then((post) => post.findAll({ order: [['id', 'DESC']] })).then((posts) => {
